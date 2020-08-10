@@ -7,6 +7,18 @@ Contains a lot of debugging tools for production. Based on alpine.
 * Certificates: `ca-certificates openssl`
 * Processes/IO: `htop atop strace iotop dstat sysstat ltrace ncdu logrotate hdparm pciutils psmisc tree pv`
 
+## Build and test
+Use make targets for building, pushing and testing
+
+### Builds the local Docker container for development
+    make build
+### Push Docker image to docker.io
+    make push
+### Test docker image locally
+    make test
+### Local cleanup
+    make clean
+	
 ## Attach to an existing container
 
 ```
