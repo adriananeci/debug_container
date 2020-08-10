@@ -3,7 +3,7 @@
 Contains a lot of debugging tools for production. Based on alpine.
 
 * Build/code: `build-base git go bash bash-completion ncurses vim tmux jq`
-* Network: `bind-tools iputils tcpdump curl nmap tcpflow iftop net-tools mtr netcat-openbsd bridge-utils iperf ngrep`
+* Network: `bind-tools iputils tcpdump curl nmap tcpflow iftop net-tools mtr netcat-openbsd bridge-utils iperf ngrep openldap-clients`
 * Certificates: `ca-certificates openssl`
 * Processes/IO: `htop atop strace iotop dstat sysstat ltrace ncdu logrotate hdparm pciutils psmisc tree pv`
 
