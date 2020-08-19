@@ -28,7 +28,7 @@ push: build ## Push Docker image to $(REGISTRY)
 # TEST
 # -----------
 
-test: build ## Test docker image in a kind cluster
+test: build ## Run docker image locally
 	docker run -it --rm --name debug_container ${NAME}:latest bash
 
 # CLEANUP
