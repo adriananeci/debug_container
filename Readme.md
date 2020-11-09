@@ -25,15 +25,14 @@ Use make targets for building, pushing and testing
 use `dnstrace` which has auto-complete and for available options see `https://github.com/redsift/dnstrace`
 
 example:
-```
-dnstrace -n 10 -c 10 --server 8.8.8.8 --recurse redsift.io
-```
+    
+    dnstrace -n 10 -c 10 --server 8.8.8.8 --recurse redsift.io
+
 
 ## Attach to an existing container
 
-```
-docker run --rm -ti --net container:<container-id> aaneci/debug
-```
+    docker run --rm -ti --net container:<container-id> aaneci/debug
+
 
 ## Use tmux inside tmux
 
