@@ -1,4 +1,4 @@
-[![GitHub Super-Linter](https://github.com/adriananeci/debug_container/workflows/ci/badge.svg)](https://github.com/marketplace/actions/super-linter)
+[![GitHub Super-Linter](https://github.com/adriananeci/debug_container/workflows/CI/badge.svg)](https://github.com/marketplace/actions/super-linter)
 
 # Debug docker container
 
@@ -25,7 +25,7 @@ Use make targets for building, pushing and testing
 use `dnstrace` which has auto-complete and for available options see `https://github.com/redsift/dnstrace`
 
 example:
-    
+
     dnstrace -n 10 -c 10 --server 8.8.8.8 --recurse redsift.io
 
 
