@@ -1,3 +1,5 @@
+[![GitHub Super-Linter](https://github.com/adriananeci/debug_container/workflows/ci/badge.svg)](https://github.com/marketplace/actions/super-linter)
+
 # Debug docker container
 
 Contains a lot of debugging tools for production. Based on golang:alpine.
