@@ -34,6 +34,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   # Build and publish debug docker iamge
   build_and_push:
+    # lint job must complete successfully before build_and_push job begins
+    needs: 
+      - lint
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
