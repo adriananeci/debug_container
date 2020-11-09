@@ -18,12 +18,6 @@ Use make targets for building, pushing and testing
 ```bash
 make build
 ```
-  
-### Push Docker image to docker.io
-
-```bash
-make push
-```
 
 ### Test docker image locally
 
@@ -35,6 +29,14 @@ make test
 
 ```bash
 make clean
+```
+
+### Push Docker image to docker.io
+
+For pushing the docker image to DockerHub you can use the [CI](https://github.com/adriananeci/debug_container/actions?query=workflow%3ACI) git actions workflow or
+
+```bash
+make push
 ```
 
 ## DNS benchmark
