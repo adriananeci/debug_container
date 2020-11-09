@@ -1,0 +1,72 @@
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push to master branch or on schedule (on the 1st of every month)
+# events
+on:
+  push:
+    branches: 
+      - master
+    tags:
+      - 'v*.*.*'
+  schedule:
+  - cron: '0 16 1 * *'
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # Set the job key. The key is displayed as the job name
+  # when a job name is not provided
+  lint:
+    # Name the Job
+    name: Lint code base
+    # Set the type of machine to run on
+    runs-on: ubuntu-latest
+    steps:
+      # Checks out a copy of your repository on the ubuntu-latest machine
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Runs the Super-Linter action
+      - name: Run Super-Linter
+        uses: github/super-linter@v3
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # Build and publish debug docker iamge
+  build_and_push:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Docker meta
+        id: docker_meta
+        uses: crazy-max/ghaction-docker-meta@v1
+        with:
+          images: aaneci/debug
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Login to DockerHub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64,linux/386
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          labels: ${{ steps.docker_meta.outputs.labels }}
