@@ -18,30 +18,31 @@ Use make targets for building, pushing and testing
 ```bash
 make build
 ```
-    
+  
 ### Push Docker image to docker.io
 
 ```bash
 make push
 ```
- 
+
 ### Test docker image locally
 
 ```bash
 make test
 ```
-    
+
 ### Local cleanup
 
 ```bash
 make clean
-
 ```
+
 ## DNS benchmark
 
 use `dnstrace` which has auto-complete and for available options see `https://github.com/redsift/dnstrace`
 
 example:
+
 ```bash
 dnstrace -n 10 -c 10 --server 8.8.8.8 --recurse redsift.io
 ```
