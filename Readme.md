@@ -10,27 +10,45 @@ Contains a lot of debugging tools for production. Based on golang:alpine.
 * Processes/IO: `htop atop strace iotop dstat sysstat ltrace ncdu logrotate hdparm pciutils psmisc tree pv`
 
 ## Build and test
+
 Use make targets for building, pushing and testing
 
 ### Builds the local Docker container for development
-    make build
-### Push Docker image to docker.io
-    make push
-### Test docker image locally
-    make test
-### Local cleanup
-    make clean
 
+```bash
+make build
+```
+    
+### Push Docker image to docker.io
+
+```bash
+make push
+```
+ 
+### Test docker image locally
+
+```bash
+make test
+```
+    
+### Local cleanup
+
+```bash
+make clean
+
+```
 ## DNS benchmark
+
 use `dnstrace` which has auto-complete and for available options see `https://github.com/redsift/dnstrace`
 
 example:
-```
+```bash
 dnstrace -n 10 -c 10 --server 8.8.8.8 --recurse redsift.io
 ```
 
 ## Attach to an existing container
-```
+
+```bash
 docker run --rm -ti --net container:<container-id> aaneci/debug
 ```
 
