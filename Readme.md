@@ -9,7 +9,7 @@ Contains a lot of debugging tools for production. Based on golang:alpine.
 * Certificates: `ca-certificates openssl`
 * Processes/IO: `htop atop strace iotop dstat sysstat ltrace ncdu logrotate hdparm pciutils psmisc tree pv`
 
-Because of [docker retention policy](https://www.docker.com/blog/scaling-dockers-business-to-serve-millions-more-developers-storage/), 
+Because of [docker retention policy](https://www.docker.com/blog/scaling-dockers-business-to-serve-millions-more-developers-storage/),
 a [github workflow](.github/workflows/ci.yml) is running on 1st of each month to build and publish a new docker image.
 
 ## Build and test
