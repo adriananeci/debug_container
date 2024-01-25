@@ -1,0 +1,57 @@
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push to master branch or on schedule (on the 1st of every month)
+# events
+on:
+  push:
+    branches:
+    - main
+    tags:
+    - 'v*.*.*'
+  schedule:
+  - cron: '0 16 1 * *'
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # Build and publish debug docker image
+  build_and_push:
+    # lint job must complete successfully before build_and_push job begins
+    needs:
+    - lint
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # this is important, otherwise it won't checkout the full tree (i.e. no previous tags)
+    - # Add support for more platforms with QEMU (optional)
+      # https://github.com/docker/setup-qemu-action
+      name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    - name: Login to DockerHub
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Set outputs
+      id: vars
+      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+    - name: Build and push
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile
+        platforms: linux/amd64,linux/arm64,linux/386
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: |
+          aaneci/debug:latest
+          aaneci/debug:${{ steps.vars.outputs.sha_short }}
+        labels: |
+          debug=all_in_one
+#          tags: ${{ steps.docker_meta.outputs.tags }}
+#          labels: ${{ steps.docker_meta.outputs.labels }}
