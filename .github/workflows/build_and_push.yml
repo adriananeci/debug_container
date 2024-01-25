@@ -1,4 +1,4 @@
-name: CI
+name: Publish Docker image
 
 # Controls when the action will run. Triggers the workflow on push to master branch or on schedule (on the 1st of every month)
 # events
