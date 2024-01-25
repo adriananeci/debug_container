@@ -5,7 +5,7 @@ name: CI
 on:
   push:
     branches: 
-      - master
+      - main
     tags:
       - 'v*.*.*'
   schedule:
@@ -31,11 +31,11 @@ jobs:
     steps:
       # Checks out a copy of your repository on the ubuntu-latest machine
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       # Runs the Super-Linter action
       - name: Run Super-Linter
-        uses: github/super-linter@v3
+        uses: github/super-linter@v6
         env:
           DEFAULT_BRANCH: main
           VALIDATE_BASH: true
@@ -44,7 +44,7 @@ jobs:
           VALIDATE_MARKDOWN: true
           VALIDATE_YAML: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  # Build and publish debug docker iamge
+  # Build and publish debug docker image
   build_and_push:
     # lint job must complete successfully before build_and_push job begins
     needs: 
@@ -53,37 +53,35 @@ jobs:
     runs-on: ubuntu-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-#      - name: Docker meta
-#        id: docker_meta
-#        uses: crazy-max/ghaction-docker-meta@v1
-#        with:
-#          images: aaneci/debug
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Login to DockerHub
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v1 
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Set outputs
-        id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-      - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64,linux/386
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: |
-            aaneci/debug:latest
-            aaneci/debug:${{ steps.vars.outputs.sha_short }}
-          labels: |
-            debug=all_in_one
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # this is important, otherwise it won't checkout the full tree (i.e. no previous tags)
+    - # Add support for more platforms with QEMU (optional)
+      # https://github.com/docker/setup-qemu-action
+      name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    - name: Login to DockerHub
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Set outputs
+      id: vars
+      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+    - name: Build and push
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile
+        platforms: linux/amd64,linux/arm64,linux/386
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: |
+          aaneci/debug:latest
+          aaneci/debug:${{ steps.vars.outputs.sha_short }}
+        labels: |
+          debug=all_in_one
 #          tags: ${{ steps.docker_meta.outputs.tags }}
 #          labels: ${{ steps.docker_meta.outputs.labels }}

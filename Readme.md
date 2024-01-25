@@ -1,4 +1,4 @@
-[![GitHub Super-Linter](https://github.com/adriananeci/debug_container/workflows/CI/badge.svg)](https://github.com/adriananeci/debug_container/actions?query=workflow%3ACI)
+[![Super-Linter](https://github.com/adriananeci/debug_container/workflows/ci.yaml/badge.svg)](https://github.com/marketplace/actions/super-linter)
 
 # Debug docker container
 
